@@ -21,7 +21,7 @@ func NewMySqlCrudRepository(db *sql.DB) domain.CrudRepository{
  
 
 func (m *MysqlCrudRepository)Create(ctx context.Context  ){
- 
+	
 }
 func (m *MysqlCrudRepository)Remove(ctx context.Context){
 
