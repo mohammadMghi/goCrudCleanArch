@@ -27,8 +27,11 @@ func NewCrudHalder(e *echo.Echo  , crudUsercase domain.CrudUsecase){
 	e.GET("/create" , handler.create)
 }
 
-func (cr *CrudHandler)update( u []User ,e error)  {
-	var test:=c.QueryParam("test")
+func (cr *CrudHandler)update( c echo.Context) error  {
+	var u []domain.User
+	var test:= c.QueryParam("test")
+	
+	
 	var ctx = c.Request().Context()
 	e := cr.CrudUseCase.Update(ctx) 
 	if  e != nil{
