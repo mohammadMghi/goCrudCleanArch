@@ -42,7 +42,11 @@ func (m MysqlCrudRepository)get(ctx context.Context , query string,args ...inter
 	return
 }
 
-func (m MysqlCrudRepository)insert(ctx context.Context , user domain.User)(u domain.User ,err error){
+ 
+
+
+func (m *MysqlCrudRepository)Create(ctx context.Context , user domain.User  )(domain.User , error){
+
 	
 	query := "INSERT INTO `teacher` (`phone`, `name`, `password`) VALUES (?, ?, ?)"
 	insertResult , err := m.mysqlDb.ExecContext(context.Background() , query , user.Phone , user.Name , user.Password)
@@ -50,11 +54,10 @@ func (m MysqlCrudRepository)insert(ctx context.Context , user domain.User)(u dom
 	if err != nil {
 
 	}
-
-	query = `SELECT id, phone, name, password FROM users WHERE id=?`
+	selectQuery := `SELECT id, phone, name, password FROM users WHERE id=?`
 
 	id , err:=insertResult.LastInsertId()
-	user , err = m.get(ctx , query , id)
+	user , err = m.get(ctx , selectQuery , id)
 
 	if err != nil {
 
@@ -63,16 +66,22 @@ func (m MysqlCrudRepository)insert(ctx context.Context , user domain.User)(u dom
 	return user , err
 }
 
-func (m *MysqlCrudRepository)Create(ctx context.Context , id int64  )(domain.User , error){
 
+func (m *MysqlCrudRepository)Remove(user domain.User)(  error){
+	_, err := m.mysqlDb.Exec("DELETE FROM users WHERE id = ?", user.ID)
+ 
+	return err
 }
-func (m *MysqlCrudRepository)Remove(ctx context.Context)(domain.User , error){
 
-}
+
 func (m *MysqlCrudRepository) Read(ctx context.Context , id int64)(domain.User , error){
-	query := "" 
+	query := `SELECT id, name, created_at, updated_at FROM author WHERE id=?`
 	return m.get(ctx , query , id)
 }
-func (m *MysqlCrudRepository)Update(ctx context.Context)(domain.User , error){
 
+
+func (m *MysqlCrudRepository)Update(ctx context.Context , user domain.User)(error){
+	_, err := m.mysqlDb.Exec("update product set phone = ?, name = ?, password = ?", user.Phone, user.Name, user.Password)
+
+	return err
 }
