@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
-    "net/http"
+	"net/http"
+
+	"example.com/go-demo-1/middleware"
 	"github.com/uptrace/bunrouter"
 )
 
@@ -16,6 +18,8 @@ func main(){
         w.Write([]byte("index"))
         return nil
     })
+
+    middL := middleware.ne
 
     log.Println("listening on http://localhost:8080")
     log.Println(http.ListenAndServe(":8080", router))

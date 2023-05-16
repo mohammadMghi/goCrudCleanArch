@@ -7,3 +7,6 @@ type User struct{
 	Password string `json:"password"`
 }
 
+type Users struct{
+	UsersArray []User `json:"users"`
+}
