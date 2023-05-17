@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"example.com/go-demo-1/domain"
 	"github.com/labstack/echo/v4"
 )
@@ -22,38 +24,75 @@ func NewCrudHalder(e *echo.Echo  , crudUsercase domain.CrudUsecase){
 		CrudUseCase: crudUsercase,
 	}
 	
-	e.DELETE("/remove" ,handler.remove)
-	e.POST("/update" , handler.update)
-	e.GET("/read" ,handler.read )
-	e.PUT("/create" , handler.create)
+	e.DELETE("/remove" ,handler.Remove)
+	e.POST("/update" , handler.Update)
+	e.GET("/read" ,handler.Read )
+	e.PUT("/create" , handler.Create)
 }
 
-func (cr *CrudHandler)Update(ctx echo.Context )( u Users ,e error) {
+func (cr *CrudHandler)Update(ctx echo.Context )( e error) {
 	
  
 	var users domain.Users  
 	
-	json.NewDecoder(c.Request().Body).Decode(&users)
+	json.NewDecoder(ctx.Request().Body).Decode(&users)
 
-	var ctx = c.Request().Context()
-	esd  , sus := cr.CrudUseCase.Update(ctx echo.Context , users.UsersArray) 
+	var ctxa = ctx.Request().Context()
+
+	u , e  := cr.CrudUseCase.Update(ctxa  , users) 
+	
 	if  e != nil{
-
+		return
 	}
+
+	return ctx.JSON(http.StatusOK , u)
 }
 
-func (cr CrudHandler)Remove(ctx context.Context  ) ( u Users ,e error) {
-	user ,e :=cr.CrudUseCase.Remove()
+func (cr CrudHandler)Remove(ctx echo.Context ) (  e error) {
+
+	var context = ctx.Request().Context()
+
+	 u,e :=cr.CrudUseCase.Remove(context)
+
 	if e != nil{
-
+		return ctx.JSON(http.StatusNotFound , "Error")
 	}
 
-	c.Response().Handler().Set(`X-Crusor`)
-}
-func (cr CrudHandler)Read(ctx context.Context  )( u Users,e error) {
+	return ctx.JSON(http.StatusOK , u)
 
 }
 
-func (cr CrudHandler)Create(ctx context.Context  )( u Users,e error) {
 
+func (cr CrudHandler)Read(ctx echo.Context )( e error) {
+ 
+
+	var c = ctx.Request().Context()
+
+	u , e  := cr.CrudUseCase.Read(c) 
+
+	if  e != nil{
+		return ctx.JSON(http.StatusNotFound , "Error")
+	}
+
+	return ctx.JSON(http.StatusOK , u)
+}
+
+
+
+func (cr CrudHandler)Create(ctx echo.Context )( error) {
+
+ 
+	var users domain.Users  
+	
+	json.NewDecoder(ctx.Request().Body).Decode(&users)
+
+	var ctxa = ctx.Request().Context()
+
+	u , e  := cr.CrudUseCase.Update(ctxa  , users) 
+
+	if  e != nil{
+		return ctx.JSON(http.StatusOK , "Error")
+	}
+
+	return ctx.JSON(http.StatusOK , u)
 }
