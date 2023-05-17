@@ -9,6 +9,7 @@ import (
 
 	"example.com/go-demo-1/middleware"
 	"example.com/go-demo-1/repository/mysql"
+	"example.com/go-demo-1/usecase"
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bunrouter"
 )
@@ -39,9 +40,14 @@ func main(){
     e := echo.New()
     middL := middleware.InitMiddleware()
     e.Use(middL.CORS)
-
-   	  crudRepo := mysql.MysqlCrudRepository(dbConn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	mysqlRepo  := mysql.NewMySqlCrudRepository(dbConn)
     
+	crdUseCase := usecase.NewCrudUsecase(mysqlRepo)
+
+	middleware.NewCrudHalder(e,crdUseCase)
 
     log.Println("listening on http://localhost:8080")
     log.Println(http.ListenAndServe(":8080", router))

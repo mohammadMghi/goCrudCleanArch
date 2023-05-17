@@ -5,23 +5,23 @@ import (
 	"database/sql"
 
 	"example.com/go-demo-1/domain"
-	"github.com/go-ginger/dl/query"
+ 
 )
 
-type MysqlCrudRepository struct{
+type mysqlCrudRepository struct{
 	mysqlDb *sql.DB
 }
 
 
 func NewMySqlCrudRepository(db *sql.DB) domain.CrudRepository{
 
-	return &MysqlCrudRepository{
+	return &mysqlCrudRepository{
 		mysqlDb:db,
 	}
 }
  
 
-func (m MysqlCrudRepository)get(ctx context.Context , query string,args ...interface{})(user domain.User , err error){
+func (m mysqlCrudRepository)get(ctx context.Context , query string,args ...interface{})(user domain.User , err error){
 	stmt ,err := m.mysqlDb.PrepareContext(ctx , query)
 
 	if err != nil{
@@ -45,7 +45,7 @@ func (m MysqlCrudRepository)get(ctx context.Context , query string,args ...inter
  
 
 
-func (m *MysqlCrudRepository)Create(ctx context.Context , user domain.User  )(domain.User , error){
+func (m *mysqlCrudRepository)Create(ctx context.Context , user domain.User  )(uuser domain.User ,e error){
 
 	
 	query := "INSERT INTO `teacher` (`phone`, `name`, `password`) VALUES (?, ?, ?)"
@@ -58,30 +58,38 @@ func (m *MysqlCrudRepository)Create(ctx context.Context , user domain.User  )(do
 
 	id , err:=insertResult.LastInsertId()
 	user , err = m.get(ctx , selectQuery , id)
+ 
 
-	if err != nil {
-
-	}
+	user , e =m.get(ctx , query , id)
+ 
 
 	return user , err
 }
 
 
-func (m *MysqlCrudRepository)Remove(user domain.User)(  error){
+func (m *mysqlCrudRepository)Remove(user domain.User)(e  error){
 	_, err := m.mysqlDb.Exec("DELETE FROM users WHERE id = ?", user.ID)
  
 	return err
 }
 
 
-func (m *MysqlCrudRepository) Read(ctx context.Context , id int64)(domain.User , error){
+func (m *mysqlCrudRepository) Read(ctx context.Context , id int64)(u domain.User , e error){
 	query := `SELECT id, name, created_at, updated_at FROM author WHERE id=?`
-	return m.get(ctx , query , id)
+ 
+
+	u , e =m.get(ctx , query , id)
+
+	return
 }
 
 
-func (m *MysqlCrudRepository)Update(ctx context.Context , user domain.User)(error){
-	_, err := m.mysqlDb.Exec("update product set phone = ?, name = ?, password = ?", user.Phone, user.Name, user.Password)
-
-	return err
+func (m *mysqlCrudRepository)Update(ctx context.Context , user domain.User)(re int64 ,e error){
+	result, err := m.mysqlDb.Exec("update product set phone = ?, name = ?, password = ? WHERE id = ?", user.Phone, user.Name, user.Password , user.ID)
+ 
+ 
+	re , e  =result.LastInsertId() 
+	
+ 
+	return re, err
 }
