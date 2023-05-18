@@ -20,7 +20,7 @@ type CrudHandler struct{
 	CrudUseCase domain.CrudUsecase
 }
 
-func NewCrudHalder(e *echo.Echo  , crudUsercase domain.CrudUsecase)CrudHandler{
+func NewCrudHalder(e *echo.Echo  , crudUsercase domain.CrudUsecase) {
 	handler := &CrudHandler{
 		CrudUseCase: crudUsercase,
 	}
@@ -29,6 +29,7 @@ func NewCrudHalder(e *echo.Echo  , crudUsercase domain.CrudUsecase)CrudHandler{
 	e.POST("/update" , handler.Update)
 	e.GET("/read:id" ,handler.Read )
 	e.PUT("/create" , handler.Create)
+ 
 }
 
 func (cr *CrudHandler)Update(ctx echo.Context )( e error) {

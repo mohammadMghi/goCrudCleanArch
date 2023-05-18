@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-
+	_ "github.com/go-sql-driver/mysql"
 	"example.com/go-demo-1/middleware"
 	"example.com/go-demo-1/repository/mysql"
 	"example.com/go-demo-1/usecase"
@@ -49,6 +49,6 @@ func main(){
 
 	middleware.NewCrudHalder(e,crdUseCase)
 
-    log.Println("listening on http://localhost:8080")
-    log.Println(http.ListenAndServe(":8080", router))
+ 
+	log.Fatal(e.Start(":8082")) //nolint
 }
