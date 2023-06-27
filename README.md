@@ -19,4 +19,9 @@ For understand of Domain Driven Design i'll write a new article in future.
 Separation of concerns mean separate as much as possible for achieve loose coupling and SOLID principle .
 For example database is one of the concerns and we have to prioritize database concerns based on future changes . for example two year later we want to change or add new databse , in this sutation we should implement or change the databse whithout chenging the logic of business . So we have to implement it with abstraction layer . abstraction layer can spreate these concerns.
 
-Separation of concerns in this arch means to separate logic with abstraction layer with interface for example in this project i separate repositories from domain and use case , repositories resposible for handel databse layer. you can add any kind of databse that you think is approprate for your businnes. in this case i have used mysql but you can add mongo db or etc.
+Separation of concerns in this arch means to separate logic with abstraction layer with interface for example in this project i have separated repositories from domain and use case , repositories resposible for handel databse layer. you can add any kind of databse that you think is approprate for your businnes. in this case i have used mysql but you can add mongo db or etc.
+
+As you know usecase is for perform a single task of logic . One of problem that i wrote in this project is i have wrote all crud proccess in the single crud_usecase but is better to for any kind of logic write a single usecase : for example create_usecase or read_usecase (Consider for implement good arch use CQRS principle)
+
+Domain in this project used for contract of logic . it's mean repositories and use case should contacted with interface in this layer .
+
