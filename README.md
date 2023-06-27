@@ -14,7 +14,9 @@ First of all we have to know about our logic , but what is meaning of logic here
 How to understand logic of the project that we want to implement? It's a very good question . for do this we have many approach , in my opinion one of the best is DDD .
 For understand of Domain Driven Design i'll write a new article in future.
 
-## Sparation of concens: 
+## separation of concerns: 
 
-separation of concerns mean separate as much as possible for achieve loose coupling and SOLID principle .
+Separation of concerns mean separate as much as possible for achieve loose coupling and SOLID principle .
 For example database is one of the concerns and we have to prioritize database concerns based on future changes . for example two year later we want to change or add new databse , in this sutation we should implement or change the databse whithout chenging the logic of business . So we have to implement it with abstraction layer . abstraction layer can spreate these concerns.
+
+Separation of concerns in this arch means to separate logic with abstraction layer with interface for example in this project i separate repositories from domain and use case , repositories resposible for handel databse layer. you can add any kind of databse that you think is approprate for your businnes. in this case i have used mysql but you can add mongo db or etc.
